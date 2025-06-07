@@ -1,10 +1,8 @@
 
 from flask import Flask, request, jsonify
 import requests
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # 允许所有域名访问，也可以只指定你自己的前端地址
 
 def get_binance_rates():
     def get_rate(asset, fiat, trade_type, pay_types, amount_limit):
@@ -47,7 +45,8 @@ def calculate():
     if type_ == "XAF":
         charges = max(amount * 0.05, 1000)
         exchanged = (amount - charges) / rate
-        return jsonify({"result": int(exchanged)})
+        exchanged = max(exchanged,0)
+        return jsonify({"result": int(exchanged)}) 
     elif type_ == "CNY":
         base = amount * rate
         charges = max(base / 0.95 * 0.05, 1000)
