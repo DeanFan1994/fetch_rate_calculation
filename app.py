@@ -1,8 +1,10 @@
 
 from flask import Flask, request, jsonify
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # 允许所有域名访问，也可以只指定你自己的前端地址
 
 def get_binance_rates():
     def get_rate(asset, fiat, trade_type, pay_types, amount_limit):
