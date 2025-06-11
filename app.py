@@ -22,7 +22,7 @@ def get_binance_rates():
             }
             r = requests.post(url, headers=headers, json=payload)
             data = r.json()
-            items.append(data["data"])
+            items.extend(data["data"])
             if len(items)>=5 :
                 break
         rates = []
