@@ -11,7 +11,7 @@ def get_binance_rates():
         items = []
         url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"        
         headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
-        for page in range (1, 9999):
+        for page in range (1, 10000):
             payload = {
                 "asset": asset,
                 "fiat": fiat,
@@ -24,13 +24,13 @@ def get_binance_rates():
             data = r.json()
             items.extend(data["data"])
             if len(items)>=5 :
-                break
-        rates = []
-        for item in items:
-            adv = item["adv"]
-            if int(adv["minSingleTransAmount"]) <= amount_limit <= int(adv["maxSingleTransAmount"]):
-                rates.append(float(adv["price"]))
-        return sum(rates)/len(rates) if rates else None
+                rates = []
+                for item in items:
+                    adv = item["adv"]
+                    if int(adv["minSingleTransAmount"]) <= amount_limit <= int(adv["maxSingleTransAmount"]):
+                        rates.append(float(adv["price"]))
+                if len(rates)>=5:
+                    return sum(rates)/len(rates) if rates else None       
 
     xaf_usdt = get_rate("USDT", "XAF", "SELL", ["MTNMOBILEMONEY", "MoMoNew", "MoMo"], 200000) + 3
     usdt_cny = get_rate("USDT", "CNY", "BUY", ["ALIPAY", "WECHAT"], 2000) - 0.04
