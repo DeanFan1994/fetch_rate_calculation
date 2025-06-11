@@ -8,20 +8,25 @@ CORS(app)  # 允许所有域名访问，也可以只指定你自己的前端地�
 
 def get_binance_rates():
     def get_rate(asset, fiat, trade_type, pay_types, amount_limit):
-        url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"
-        payload = {
-            "asset": asset,
-            "fiat": fiat,
-            "tradeType": trade_type,
-            "payTypes": pay_types,
-            "page": 1,
-            "rows": 20
-        }
+        items = []
+        url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"        
         headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
-        r = requests.post(url, headers=headers, json=payload)
-        data = r.json()
+        for page in range (1, 9999):
+            payload = {
+                "asset": asset,
+                "fiat": fiat,
+                "tradeType": trade_type,
+                "payTypes": pay_types,
+                "page": page,
+                "rows": 20
+            }
+            r = requests.post(url, headers=headers, json=payload)
+            data = r.json()
+            items.append(data["data"])
+            if len(items)>=5 :
+                break
         rates = []
-        for item in data["data"]:
+        for item in items:
             adv = item["adv"]
             if int(adv["minSingleTransAmount"]) <= amount_limit <= int(adv["maxSingleTransAmount"]):
                 rates.append(float(adv["price"]))
