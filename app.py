@@ -33,7 +33,7 @@ def get_binance_rates():
                     return sum(rates)/len(rates) if rates else None       
 
     xaf_usdt = get_rate("USDT", "XAF", "SELL", ["MTNMOBILEMONEY", "MoMoNew", "MoMo"], 200000) + 3
-    usdt_cny = get_rate("USDT", "CNY", "BUY", ["ALIPAY", "WECHAT"], 2000) - 0.04
+    usdt_cny = get_rate("USDT", "CNY", "BUY", [], 2000) - 0.04
     my_rate = xaf_usdt / usdt_cny / (1 - 0.015)
     return round(my_rate, 2)
 
