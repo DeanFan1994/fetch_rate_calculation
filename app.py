@@ -1,6 +1,5 @@
-
 from flask import Flask, request, jsonify
-import requests
+import requests, time, random
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -10,8 +9,17 @@ def get_binance_rates():
     def get_rate(asset, fiat, trade_type, pay_types, amount_limit):
         items = []
         url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"        
-        headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+            "Accept": "application/json",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Origin": "https://p2p.binance.com",
+            "Referer": "https://p2p.binance.com/zh-CN/trade/sell/USDT?fiat=XAF&payment=MTNMOBILEMONEY",
+        }
         for page in range (1, 10000):
+            time.sleep(random.uniform(1, 2))
             payload = {
                 "asset": asset,
                 "fiat": fiat,
